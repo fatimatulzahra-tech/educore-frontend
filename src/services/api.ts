@@ -55,12 +55,9 @@ api.interceptors.response.use(
         }
 
         // Call refresh endpoint
-        const res = await axios.post(
-          "http://127.0.0.1:8000/auth/refresh",
-          {
-            refresh_token: refreshToken
-          }
-        )
+        const res = await api.post("/auth/refresh", {
+  refresh_token: refreshToken,
+})
 
         const newAccessToken =
           res.data.access_token
