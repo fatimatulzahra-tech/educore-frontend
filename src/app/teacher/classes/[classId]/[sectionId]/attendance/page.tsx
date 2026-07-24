@@ -24,9 +24,11 @@ export default function Attendance({
     Record<number, string>
   >({});
 
+
   useEffect(() => {
     loadStudents();
   }, []);
+
 
   const loadStudents = async () => {
     try {
@@ -49,12 +51,15 @@ export default function Attendance({
       });
 
       setAttendance(initial);
+
     } catch (err) {
       console.log(err);
+
     } finally {
       setLoading(false);
     }
   };
+
 
   const submitAttendance = async () => {
     try {
@@ -68,84 +73,156 @@ export default function Attendance({
       }
 
       alert("Attendance saved successfully");
+
     } catch (err) {
       console.log(err);
       alert("Failed to save attendance");
     }
   };
 
+
   if (loading) {
-    return <div className="p-8">Loading...</div>;
+    return <div className="p-4 md:p-8">Loading...</div>;
   }
 
-  return (
-    <div className="p-8">
 
-      <h1 className="text-4xl font-bold mb-8">
+  return (
+    <div className="p-4 md:p-8">
+
+
+      <h1 className="
+        text-2xl
+        md:text-4xl
+        font-bold
+        mb-6
+        md:mb-8
+      ">
         Class Attendance
       </h1>
 
-      <div className="bg-white rounded-xl shadow p-6 mb-6 flex items-center justify-between">
+
+
+      <div className="
+        bg-white
+        rounded-xl
+        shadow
+        p-4
+        md:p-6
+        mb-6
+        flex
+        flex-col
+        sm:flex-row
+        sm:items-center
+        sm:justify-between
+        gap-4
+      ">
+
 
         <div>
-          <h2 className="text-xl font-semibold">
+          <h2 className="text-lg md:text-xl font-semibold">
             Attendance Date
           </h2>
         </div>
+
 
         <input
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
-          className="border rounded-lg p-2"
+          className="
+            border
+            rounded-lg
+            p-2
+            w-full
+            sm:w-auto
+          "
         />
+
 
       </div>
 
-      <div className="bg-white rounded-xl shadow overflow-hidden">
 
-        <div className="max-h-[500px] overflow-y-auto">
 
-          <table className="w-full">
+      <div className="
+        bg-white
+        rounded-xl
+        shadow
+        overflow-hidden
+      ">
 
-            <thead className="bg-gray-100 sticky top-0">
+
+        <div className="
+          max-h-[500px]
+          overflow-y-auto
+          overflow-x-auto
+        ">
+
+
+          <table className="
+            w-full
+            min-w-[650px]
+          ">
+
+
+            <thead className="
+              bg-gray-100
+              sticky
+              top-0
+            ">
+
 
               <tr>
+
 
                 <th className="text-left p-4">
                   Student Name
                 </th>
 
+
                 <th className="text-left p-4">
                   Admission No.
                 </th>
+
 
                 <th className="text-left p-4">
                   Status
                 </th>
 
+
               </tr>
+
 
             </thead>
 
+
+
             <tbody>
 
+
               {students.map((student: any) => (
+
 
                 <tr
                   key={student.enrollment_id}
                   className="border-t"
                 >
 
-                  <td className="p-4 font-medium">
+
+                  <td className="
+                    p-4
+                    font-medium
+                  ">
                     {student.student_name}
                   </td>
+
 
                   <td className="p-4">
                     {student.admission_number}
                   </td>
 
+
                   <td className="p-4">
+
 
                     <select
                       value={
@@ -153,6 +230,7 @@ export default function Attendance({
                           student.enrollment_id
                         ]
                       }
+
                       onChange={(e) =>
                         setAttendance((prev) => ({
                           ...prev,
@@ -160,8 +238,14 @@ export default function Attendance({
                             e.target.value,
                         }))
                       }
-                      className="border rounded-lg p-2"
+
+                      className="
+                        border
+                        rounded-lg
+                        p-2
+                      "
                     >
+
                       <option value="present">
                         Present
                       </option>
@@ -178,28 +262,48 @@ export default function Attendance({
                         Leave
                       </option>
 
+
                     </select>
+
 
                   </td>
 
+
                 </tr>
+
 
               ))}
 
+
             </tbody>
+
 
           </table>
 
+
         </div>
+
 
       </div>
 
+
+
       <button
         onClick={submitAttendance}
-        className="mt-6 bg-black text-white px-6 py-3 rounded-lg"
+        className="
+          mt-6
+          bg-black
+          text-white
+          px-6
+          py-3
+          rounded-lg
+          w-full
+          sm:w-auto
+        "
       >
         Save Attendance
       </button>
+
 
     </div>
   );

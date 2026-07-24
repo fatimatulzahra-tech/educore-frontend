@@ -32,16 +32,42 @@ export default function PlatformLayout({
     }`;
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen w-full overflow-x-hidden bg-gray-100 flex-col md:flex-row">
+
       {/* SIDEBAR */}
 
-      <aside className="w-64 bg-black text-white p-6 flex flex-col">
+      <aside className="
+        w-full
+        md:w-64
+        bg-black
+        text-white
+        p-4
+        md:p-6
+        flex
+        flex-col
+        justify-between
+        shrink-0
+      ">
+
         <div>
-          <h1 className="text-3xl font-bold mb-10">
+          <h1 className="
+            text-2xl
+            md:text-3xl
+            font-bold
+            mb-6
+            md:mb-10
+          ">
             EduCore
           </h1>
 
-          <nav className="space-y-2">
+          <nav className="
+            flex
+            flex-row
+            md:flex-col
+            gap-2
+            overflow-x-auto
+            md:overflow-visible
+          ">
             <Link
               href="/platform/dashboard"
               className={navLinkClass(
@@ -82,16 +108,25 @@ export default function PlatformLayout({
 
         {/* LOGOUT */}
 
-        <div className="mt-12">
+        <div className="mt-6 md:mt-12">
           <LogoutButton />
         </div>
+
       </aside>
+
 
       {/* MAIN */}
 
-      <main className="flex-1 p-8">
+      <main className="
+        flex-1
+        w-full
+        p-4
+        md:p-8
+        overflow-x-auto
+      ">
         {children}
       </main>
+
     </div>
   );
 }

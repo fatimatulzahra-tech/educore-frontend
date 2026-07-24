@@ -11,93 +11,149 @@ export default function PrincipalLayout({
 }) {
   return (
     <ProtectedRoute allowedRoles={["principal"]}>
-      <div className="min-h-screen flex bg-gray-100">
+      <div className="
+        min-h-screen
+        w-full
+        overflow-x-hidden
+        flex
+        flex-col
+        md:flex-row
+        bg-gray-100
+      ">
+
         {/* SIDEBAR */}
-        <aside className="w-72 bg-black text-white p-6 flex flex-col">
-          <h1 className="text-3xl font-bold mb-8 border-b border-gray-700 pb-4">
-            Principal Panel
-          </h1>
+        <aside className="
+          w-full
+          md:w-72
+          shrink-0
+          bg-black
+          text-white
+          p-4
+          md:p-6
+          flex
+          flex-col
+          justify-between
+        ">
 
-          <nav className="flex flex-col gap-2">
-            <Link
-              href="/principal/dashboard"
-              className="px-4 py-3 rounded-lg hover:bg-gray-800 transition"
-            >
-              Dashboard
-            </Link>
+          <div>
+            <h1 className="
+              text-2xl
+              md:text-3xl
+              font-bold
+              mb-6
+              md:mb-8
+              border-b
+              border-gray-700
+              pb-4
+            ">
+              Principal Panel
+            </h1>
 
-            <Link
-              href="/principal/classes"
-              className="px-4 py-3 rounded-lg hover:bg-gray-800 transition"
-            >
-              Classes
-            </Link>
 
-            <Link
-              href="/principal/teachers"
-              className="px-4 py-3 rounded-lg hover:bg-gray-800 transition"
-            >
-              Teachers
-            </Link>
+            <nav className="
+              flex
+              flex-row
+              md:flex-col
+              gap-2
+              overflow-x-auto
+              md:overflow-visible
+              pb-2
+              md:pb-0
+            ">
 
-            <Link
-              href="/principal/teacher-assignments"
-              className="px-4 py-3 rounded-lg hover:bg-gray-800 transition"
-            >
-              Teacher Assignments
-            </Link>
+              <Link
+                href="/principal/dashboard"
+                className="px-4 py-3 rounded-lg hover:bg-gray-800 transition whitespace-nowrap"
+              >
+                Dashboard
+              </Link>
 
-            <Link
-              href="/principal/students"
-              className="px-4 py-3 rounded-lg hover:bg-gray-800 transition"
-            >
-              Students
-            </Link>
+              <Link
+                href="/principal/classes"
+                className="px-4 py-3 rounded-lg hover:bg-gray-800 transition whitespace-nowrap"
+              >
+                Classes
+              </Link>
 
-            <Link
-              href="/principal/attendance"
-              className="px-4 py-3 rounded-lg hover:bg-gray-800 transition"
-            >
-              Attendance
-            </Link>
+              <Link
+                href="/principal/teachers"
+                className="px-4 py-3 rounded-lg hover:bg-gray-800 transition whitespace-nowrap"
+              >
+                Teachers
+              </Link>
 
-            <Link
-              href="/principal/exams"
-              className="px-4 py-3 rounded-lg hover:bg-gray-800 transition"
-            >
-              Exams
-            </Link>
+              <Link
+                href="/principal/teacher-assignments"
+                className="px-4 py-3 rounded-lg hover:bg-gray-800 transition whitespace-nowrap"
+              >
+                Teacher Assignments
+              </Link>
 
-            <Link
-              href="/principal/accountants"
-              className="px-4 py-3 rounded-lg hover:bg-gray-800 transition"
-            >
-              Accountants
-            </Link>
+              <Link
+                href="/principal/students"
+                className="px-4 py-3 rounded-lg hover:bg-gray-800 transition whitespace-nowrap"
+              >
+                Students
+              </Link>
 
-            <Link
-              href="/principal/fees"
-              className="px-4 py-3 rounded-lg hover:bg-gray-800 transition"
-            >
-              Fees
-            </Link>
+              <Link
+                href="/principal/attendance"
+                className="px-4 py-3 rounded-lg hover:bg-gray-800 transition whitespace-nowrap"
+              >
+                Attendance
+              </Link>
 
-            <Link
-              href="/principal/academics"
-              className="px-4 py-3 rounded-lg hover:bg-gray-800 transition"
-            >
-              Academics
-            </Link>
-          </nav>
+              <Link
+                href="/principal/exams"
+                className="px-4 py-3 rounded-lg hover:bg-gray-800 transition whitespace-nowrap"
+              >
+                Exams
+              </Link>
+
+              <Link
+                href="/principal/accountants"
+                className="px-4 py-3 rounded-lg hover:bg-gray-800 transition whitespace-nowrap"
+              >
+                Accountants
+              </Link>
+
+              <Link
+                href="/principal/fees"
+                className="px-4 py-3 rounded-lg hover:bg-gray-800 transition whitespace-nowrap"
+              >
+                Fees
+              </Link>
+
+              <Link
+                href="/principal/academics"
+                className="px-4 py-3 rounded-lg hover:bg-gray-800 transition whitespace-nowrap"
+              >
+                Academics
+              </Link>
+
+            </nav>
+          </div>
+
 
           {/* PUSH LOGOUT TO BOTTOM */}
-          <div className="mt-8">
+          <div className="mt-6 md:mt-8">
             <LogoutButton />
           </div>
+
         </aside>
 
+
         {/* MAIN CONTENT */}
-        <main className="flex-1 p-8 overflow-auto">{children}</main>
+        <main className="
+          flex-1
+          w-full
+          p-4
+          md:p-8
+          overflow-x-auto
+        ">
+          {children}
+        </main>
+
       </div>
     </ProtectedRoute>
   );

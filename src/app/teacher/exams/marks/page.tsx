@@ -232,7 +232,7 @@ export default function MarksPage() {
 
     return (
 
-      <div className="p-6">
+      <div className="p-4 md:p-6">
 
         Loading...
 
@@ -247,22 +247,34 @@ export default function MarksPage() {
 
   return (
 
-    <div className="p-6">
+    <div className="
+      p-4
+      md:p-6
+    ">
 
 
       {exam && (
 
-        <div className="mb-8">
+        <div className="mb-6 md:mb-8">
 
 
-          <h1 className="text-3xl font-bold">
+          <h1 className="
+            text-2xl
+            md:text-3xl
+            font-bold
+          ">
 
             {exam.title}
 
           </h1>
 
 
-          <p className="text-gray-500 mt-2">
+          <p className="
+            text-gray-500
+            mt-2
+            text-sm
+            md:text-base
+          ">
 
             {exam.subject}
             {" | "}
@@ -289,13 +301,25 @@ export default function MarksPage() {
 
 
 
-      <div className="bg-white rounded-lg border">
+
+      <div className="
+        bg-white
+        rounded-lg
+        border
+        overflow-x-auto
+      ">
 
 
-        <table className="w-full">
+        <table className="
+          w-full
+          min-w-[600px]
+        ">
 
 
-          <thead className="bg-gray-50 border-b">
+          <thead className="
+            bg-gray-50
+            border-b
+          ">
 
             <tr>
 
@@ -387,7 +411,14 @@ export default function MarksPage() {
                   }
 
 
-                  className="border rounded px-3 py-1 w-32"
+                  className="
+                    border
+                    rounded
+                    px-3
+                    py-2
+                    w-28
+                    md:w-32
+                  "
 
                 />
 
@@ -413,13 +444,23 @@ export default function MarksPage() {
 
 
 
+
       <button
 
         onClick={saveMarks}
 
         disabled={saving}
 
-        className="mt-6 bg-black text-white px-6 py-3 rounded"
+        className="
+          mt-6
+          bg-black
+          text-white
+          px-6
+          py-3
+          rounded
+          w-full
+          sm:w-auto
+        "
 
       >
 

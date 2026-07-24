@@ -53,7 +53,7 @@ export default function PrincipalDashboard() {
 
     return (
 
-      <div className="p-8">
+      <div className="p-4 sm:p-8">
 
         Loading Dashboard...
 
@@ -64,9 +64,9 @@ export default function PrincipalDashboard() {
 
   return (
 
-    <div className="p-8">
+    <div className="p-4 sm:p-8">
 
-      <h1 className="text-4xl font-bold mb-8">
+      <h1 className="text-2xl sm:text-4xl font-bold mb-6 sm:mb-8">
 
         Principal Dashboard
 
@@ -74,15 +74,15 @@ export default function PrincipalDashboard() {
 
       {/* TOP CARDS */}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
 
-        <div className="bg-white rounded-xl shadow p-6">
+        <div className="bg-white rounded-xl shadow p-4 sm:p-6">
 
           <h3 className="text-gray-500">
             Students
           </h3>
 
-          <p className="text-3xl font-bold mt-2">
+          <p className="text-2xl sm:text-3xl font-bold mt-2">
 
             {stats.total_students}
 
@@ -90,13 +90,13 @@ export default function PrincipalDashboard() {
 
         </div>
 
-        <div className="bg-white rounded-xl shadow p-6">
+        <div className="bg-white rounded-xl shadow p-4 sm:p-6">
 
           <h3 className="text-gray-500">
             Classes
           </h3>
 
-          <p className="text-3xl font-bold mt-2">
+          <p className="text-2xl sm:text-3xl font-bold mt-2">
 
             {stats.total_classes}
 
@@ -104,13 +104,13 @@ export default function PrincipalDashboard() {
 
         </div>
 
-        <div className="bg-white rounded-xl shadow p-6">
+        <div className="bg-white rounded-xl shadow p-4 sm:p-6">
 
           <h3 className="text-gray-500">
             Sections
           </h3>
 
-          <p className="text-3xl font-bold mt-2">
+          <p className="text-2xl sm:text-3xl font-bold mt-2">
 
             {stats.total_sections}
 
@@ -118,13 +118,13 @@ export default function PrincipalDashboard() {
 
         </div>
 
-        <div className="bg-white rounded-xl shadow p-6">
+        <div className="bg-white rounded-xl shadow p-4 sm:p-6">
 
           <h3 className="text-gray-500">
             Attendance %
           </h3>
 
-          <p className="text-3xl font-bold mt-2">
+          <p className="text-2xl sm:text-3xl font-bold mt-2">
 
             {stats.attendance_percentage}%
 
@@ -136,15 +136,15 @@ export default function PrincipalDashboard() {
 
       {/* ATTENDANCE CARDS */}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
 
-        <div className="bg-white rounded-xl shadow p-6">
+        <div className="bg-white rounded-xl shadow p-4 sm:p-6">
 
           <h3 className="text-gray-500">
             Present Today
           </h3>
 
-          <p className="text-3xl font-bold mt-2">
+          <p className="text-2xl sm:text-3xl font-bold mt-2">
 
             {stats.present_today}
 
@@ -152,13 +152,13 @@ export default function PrincipalDashboard() {
 
         </div>
 
-        <div className="bg-white rounded-xl shadow p-6">
+        <div className="bg-white rounded-xl shadow p-4 sm:p-6">
 
           <h3 className="text-gray-500">
             Absent Today
           </h3>
 
-          <p className="text-3xl font-bold mt-2">
+          <p className="text-2xl sm:text-3xl font-bold mt-2">
 
             {stats.absent_today}
 
@@ -166,13 +166,13 @@ export default function PrincipalDashboard() {
 
         </div>
 
-        <div className="bg-white rounded-xl shadow p-6">
+        <div className="bg-white rounded-xl shadow p-4 sm:p-6">
 
           <h3 className="text-gray-500">
             Late Today
           </h3>
 
-          <p className="text-3xl font-bold mt-2">
+          <p className="text-2xl sm:text-3xl font-bold mt-2">
 
             {stats.late_today}
 

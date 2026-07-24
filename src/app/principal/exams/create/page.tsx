@@ -84,17 +84,17 @@ export default function CreateExam() {
   };
 
   return (
-    <div className="p-6 max-w-3xl">
+    <div className="p-4 sm:p-6 max-w-3xl">
 
-      <h1 className="text-3xl font-bold mb-2">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-2">
         Create Exam
       </h1>
 
-      <p className="text-gray-500 mb-8">
+      <p className="text-gray-500 mb-6 sm:mb-8">
         Schedule a new examination.
       </p>
 
-      <div className="bg-white rounded-xl shadow p-6 space-y-5">
+      <div className="bg-white rounded-xl shadow p-4 sm:p-6 space-y-5">
 
         <div>
           <label className="block font-medium mb-2">
@@ -105,7 +105,7 @@ export default function CreateExam() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Mid Term Examination"
-            className="border rounded-lg w-full px-4 py-2"
+            className="border rounded-lg w-full px-3 sm:px-4 py-2"
           />
         </div>
 
@@ -120,7 +120,7 @@ export default function CreateExam() {
               setClassId(e.target.value);
               setSectionId("");
             }}
-            className="border rounded-lg w-full px-4 py-2"
+            className="border rounded-lg w-full px-3 sm:px-4 py-2"
           >
             <option value="">Select Class</option>
 
@@ -140,7 +140,7 @@ export default function CreateExam() {
           <select
             value={sectionId}
             onChange={(e) => setSectionId(e.target.value)}
-            className="border rounded-lg w-full px-4 py-2"
+            className="border rounded-lg w-full px-3 sm:px-4 py-2"
           >
             <option value="">Select Section</option>
 
@@ -160,7 +160,7 @@ export default function CreateExam() {
           <select
             value={subjectId}
             onChange={(e) => setSubjectId(e.target.value)}
-            className="border rounded-lg w-full px-4 py-2"
+            className="border rounded-lg w-full px-3 sm:px-4 py-2"
           >
             <option value="">Select Subject</option>
 
@@ -181,14 +181,14 @@ export default function CreateExam() {
             type="number"
             value={totalMarks}
             onChange={(e) => setTotalMarks(e.target.value)}
-            className="border rounded-lg w-full px-4 py-2"
+            className="border rounded-lg w-full px-3 sm:px-4 py-2"
           />
         </div>
 
         <button
           onClick={submit}
           disabled={loading}
-          className="bg-black text-white px-6 py-3 rounded-lg"
+          className="bg-black text-white w-full sm:w-auto px-6 py-3 rounded-lg"
         >
           {loading ? "Creating..." : "Create Exam"}
         </button>

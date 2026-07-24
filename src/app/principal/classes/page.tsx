@@ -15,23 +15,20 @@ export default function ClassesPage() {
 
   const [loading, setLoading] = useState(false)
 
-  // FETCH CLASSES
   const fetchClasses = async () => {
     try {
       const res = await api.get("/classes/")
-       console.log("Request URL:", res.request?.responseURL)
-    console.log("Classes:", res.data)
+      console.log("Request URL:", res.request?.responseURL)
+      console.log("Classes:", res.data)
       setClasses(res.data || [])
     } catch (err) {
       console.log(err)
     }
   }
 
-  // FETCH SECTIONS
   const fetchSections = async () => {
     try {
       const res = await api.get("/sections/")
-
       setSections(res.data || [])
     } catch (err) {
       console.log(err)
@@ -43,7 +40,6 @@ export default function ClassesPage() {
     fetchSections()
   }, [])
 
-  // CREATE CLASS
   const createClass = async () => {
     if (!name) {
       return alert("Class name required")
@@ -62,7 +58,6 @@ export default function ClassesPage() {
 
     } catch (err) {
       console.log(err)
-
       alert("Error creating class")
 
     } finally {
@@ -71,13 +66,12 @@ export default function ClassesPage() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
 
-      <h1 className="text-3xl font-bold mb-6">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6">
         Class Management
       </h1>
 
-      {/* CREATE CLASS */}
 
       <div className="bg-white p-4 shadow rounded mb-6">
 
@@ -97,7 +91,7 @@ export default function ClassesPage() {
         <button
           onClick={createClass}
           disabled={loading}
-          className="bg-black text-white px-4 py-2 rounded"
+          className="bg-black text-white px-4 py-2 rounded w-full sm:w-auto"
         >
 
           {
@@ -110,7 +104,6 @@ export default function ClassesPage() {
 
       </div>
 
-      {/* SECTION CREATION BOX */}
 
       <div className="bg-white p-4 shadow rounded mb-6">
 
@@ -118,7 +111,6 @@ export default function ClassesPage() {
           Create Section
         </h2>
 
-        {/* SELECT CLASS */}
 
         <select
           className="border p-2 w-full mb-3"
@@ -148,7 +140,6 @@ export default function ClassesPage() {
 
         </select>
 
-        {/* SECTION NAME */}
 
         <input
           className="border p-2 w-full mb-3"
@@ -161,8 +152,9 @@ export default function ClassesPage() {
           }
         />
 
+
         <button
-          className="bg-black text-white px-4 py-2 rounded"
+          className="bg-black text-white px-4 py-2 rounded w-full sm:w-auto"
           onClick={async () => {
 
             if (
@@ -206,7 +198,6 @@ export default function ClassesPage() {
 
       </div>
 
-      {/* CLASS STRUCTURE VIEW */}
 
       <div className="bg-white p-4 shadow rounded">
 
@@ -214,11 +205,13 @@ export default function ClassesPage() {
           Class Structure
         </h2>
 
+
         {classes.length === 0 && (
           <p>
             No classes created yet
           </p>
         )}
+
 
         {classes.map((cls) => (
 
@@ -227,15 +220,14 @@ export default function ClassesPage() {
             className="mb-4 border p-3 rounded"
           >
 
-            <h3 className="font-bold text-lg">
+            <h3 className="font-bold text-base sm:text-lg">
 
               📚 {cls.name}
 
             </h3>
 
-            {/* FILTER SECTIONS */}
 
-            <div className="ml-4 mt-2">
+            <div className="ml-2 sm:ml-4 mt-2">
 
               {sections
                 .filter(
@@ -247,7 +239,7 @@ export default function ClassesPage() {
 
                   <div
                     key={sec.id}
-                    className="text-gray-700"
+                    className="text-gray-700 text-sm sm:text-base"
                   >
 
                     🧩 {sec.name}

@@ -75,25 +75,45 @@ export default function StudentResults() {
 
 
 
+
   return (
 
-    <div className="p-6">
+    <div className="
+      p-4
+      md:p-6
+    ">
 
 
-      <div className="mb-8">
 
-        <h1 className="text-3xl font-bold">
+      <div className="
+        mb-6
+        md:mb-8
+      ">
+
+
+        <h1 className="
+          text-2xl
+          md:text-3xl
+          font-bold
+        ">
 
           Results
 
         </h1>
 
 
-        <p className="text-gray-500 mt-2">
+
+        <p className="
+          text-gray-500
+          mt-2
+          text-sm
+          md:text-base
+        ">
 
           View your examination results.
 
         </p>
+
 
 
       </div>
@@ -101,9 +121,17 @@ export default function StudentResults() {
 
 
 
+
+
       {loading ? (
 
-        <div className="bg-white p-6 rounded shadow">
+
+        <div className="
+          bg-white
+          p-6
+          rounded
+          shadow
+        ">
 
           Loading results...
 
@@ -111,10 +139,19 @@ export default function StudentResults() {
 
 
 
+
+
       ) : results.length === 0 ? (
 
 
-        <div className="bg-white p-6 rounded shadow text-gray-500">
+
+        <div className="
+          bg-white
+          p-6
+          rounded
+          shadow
+          text-gray-500
+        ">
 
           No results available.
 
@@ -122,25 +159,47 @@ export default function StudentResults() {
 
 
 
+
+
       ) : (
 
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+        <div className="
+          grid
+          grid-cols-1
+          sm:grid-cols-2
+          gap-5
+        ">
+
 
 
           {results.map((result)=>(
+
 
 
             <div
 
               key={result.id}
 
-              className="bg-white rounded-xl shadow p-6"
+              className="
+                bg-white
+                rounded-xl
+                shadow
+                p-5
+                md:p-6
+              "
 
             >
 
 
-              <h2 className="text-xl font-semibold mb-4">
+
+              <h2 className="
+                text-lg
+                md:text-xl
+                font-semibold
+                mb-4
+              ">
 
                 {result.exam}
 
@@ -148,7 +207,10 @@ export default function StudentResults() {
 
 
 
+
+
               <div className="space-y-2">
+
 
 
                 <p>
@@ -160,6 +222,8 @@ export default function StudentResults() {
                   {result.subject}
 
                 </p>
+
+
 
 
 
@@ -179,11 +243,15 @@ export default function StudentResults() {
 
 
 
+
+
                 <p>
 
                   <strong>
                     Percentage:
                   </strong>{" "}
+
+
 
                   {(
                     (result.obtained_marks /
@@ -196,16 +264,22 @@ export default function StudentResults() {
 
 
 
+
+
               </div>
+
 
 
             </div>
 
 
+
           ))}
 
 
+
         </div>
+
 
 
       )}

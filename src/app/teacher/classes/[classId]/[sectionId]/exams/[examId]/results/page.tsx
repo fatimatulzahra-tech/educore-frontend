@@ -1,193 +1,243 @@
-"use client"
+"use client";
 
 import {
+  useState,
+  useEffect
+} from "react";
 
-useState,
+import api from "@/services/api";
 
-useEffect
-
-} from "react"
-
-import api from "@/services/api"
 
 export default function Results({
+  params
+}: any) {
 
-params
+  const [exam, setExam] = useState(null);
 
-}:any){
+  const [students, setStudents] = useState([]);
 
-const [exam,setExam]=useState(null)
 
-const [students,setStudents]=useState([])
+  useEffect(() => {
 
-useEffect(()=>{
+    load();
 
-load()
+  }, []);
 
-},[])
 
-const load=async()=>{
 
-const exam=
+  const load = async () => {
 
-await api.get(
+    const exam =
+      await api.get(
+        `/exams/${params.examId}`
+      );
 
-`/exams/${params.examId}`
 
-)
+    setExam(exam.data);
 
-setExam(exam.data)
 
-const students=
+    const students =
+      await api.get(
+        "/students/teacher",
+        {
+          params: {
+            class_id:
+              exam.data.class_id,
 
-await api.get(
+            section_id:
+              exam.data.section_id
+          }
+        }
+      );
 
-"/students/teacher",
 
-{
+    setStudents(
+      students.data
+    );
 
-params:{
+  };
 
-class_id:
 
-exam.data.class_id,
 
-section_id:
+  return (
 
-exam.data.section_id
+    <div className="
+      p-4
+      md:p-8
+    ">
+
+
+      <h1 className="
+        text-2xl
+        md:text-3xl
+        font-bold
+        mb-6
+      ">
+        Enter Results
+      </h1>
+
+
+
+      <div className="
+        grid
+        grid-cols-1
+        md:grid-cols-2
+        xl:grid-cols-3
+        gap-5
+      ">
+
+        {
+          students.map(
+
+            (student:any) => (
+
+              <StudentResult
+
+                key={student.id}
+
+                student={student}
+
+                examId={params.examId}
+
+              />
+
+            )
+
+          )
+        }
+
+
+      </div>
+
+
+    </div>
+
+  );
 
 }
 
-}
 
-)
-
-setStudents(
-
-students.data
-
-)
-
-}
-
-return(
-
-<div>
-
-<h1>
-
-Enter Results
-
-</h1>
-
-{
-
-students.map(
-
-(student:any)=>(
-
-<StudentResult
-
-key={student.id}
-
-student={student}
-
-examId={params.examId}
-
-/>
-
-)
-
-)
-
-}
-
-</div>
-
-)
-
-}
 
 function StudentResult({
 
-student,
+  student,
 
-examId
+  examId
 
 }:any){
 
-const [marks,setMarks]=useState("")
 
-const save=async()=>{
+  const [marks,setMarks] = useState("");
 
-await api.post(
 
-"/results",
 
-null,
+  const save = async()=>{
 
-{
 
-params:{
+    await api.post(
 
-exam_id:examId,
+      "/results",
 
-student_id:student.id,
+      null,
 
-marks
+      {
 
-}
+        params:{
 
-}
+          exam_id:examId,
 
-)
+          student_id:student.id,
 
-alert("Saved")
+          marks
 
-}
+        }
 
-return(
+      }
 
-<div className="bg-white p-5 rounded shadow">
+    );
 
-<h2>
 
-{student.first_name}
+    alert("Saved");
 
-{" "}
 
-{student.last_name}
+  };
 
-</h2>
 
-<input
 
-placeholder="Marks"
+  return (
 
-onChange={(e)=>
+    <div className="
+      bg-white
+      p-5
+      rounded
+      shadow
+      space-y-4
+    ">
 
-setMarks(
 
-e.target.value
+      <h2 className="
+        text-lg
+        font-semibold
+      ">
 
-)
+        {student.first_name}
 
-}
+        {" "}
 
-/>
+        {student.last_name}
 
-<button
 
-onClick={save}
+      </h2>
 
->
 
-Save
 
-</button>
+      <input
 
-</div>
+        placeholder="Marks"
 
-)
+        className="
+          w-full
+          border
+          rounded-lg
+          p-2
+        "
+
+        onChange={(e)=>
+
+          setMarks(
+
+            e.target.value
+
+          )
+
+        }
+
+      />
+
+
+
+      <button
+
+        onClick={save}
+
+        className="
+          bg-black
+          text-white
+          px-4
+          py-2
+          rounded-lg
+          w-full
+        "
+
+      >
+
+        Save
+
+      </button>
+
+
+    </div>
+
+  );
 
 }

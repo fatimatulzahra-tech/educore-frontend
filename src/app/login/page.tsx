@@ -101,34 +101,84 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-[400px] border p-8 rounded-lg bg-white shadow">
-        <h1 className="text-2xl font-bold mb-5">Login</h1>
+    <div className="
+      min-h-screen
+      w-full
+      flex
+      items-center
+      justify-center
+      bg-gray-50
+      px-4
+    ">
+
+      <div className="
+        w-full
+        max-w-[400px]
+        border
+        p-6
+        sm:p-8
+        rounded-lg
+        bg-white
+        shadow
+      ">
+
+        <h1 className="
+          text-2xl
+          font-bold
+          mb-5
+        ">
+          Login
+        </h1>
+
 
         <input
           type="email"
           placeholder="Email"
-          className="w-full border p-2 mb-4"
+          className="
+            w-full
+            border
+            p-2
+            mb-4
+            rounded
+          "
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
+
         <input
           type="password"
           placeholder="Password"
-          className="w-full border p-2 mb-4"
+          className="
+            w-full
+            border
+            p-2
+            mb-4
+            rounded
+          "
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
+
         <button
           onClick={handleLogin}
           disabled={loading}
-          className="bg-black text-white px-4 py-2 rounded w-full"
+          className="
+            bg-black
+            text-white
+            px-4
+            py-2
+            rounded
+            w-full
+          "
         >
           {loading ? "Logging in..." : "Login"}
         </button>
+
+
       </div>
+
     </div>
   );
 }

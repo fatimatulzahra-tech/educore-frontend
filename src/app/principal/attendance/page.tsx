@@ -13,7 +13,6 @@ export default function AttendancePage() {
   const currentDate = new Date();
 
   const currentMonth = currentDate.getMonth() + 1;
-
   const currentYear = currentDate.getFullYear();
 
   useEffect(() => {
@@ -50,60 +49,57 @@ export default function AttendancePage() {
       ]);
 
       setToday(todayRes.data);
-
       setMonthly(monthlyRes.data);
-
       setYearly(yearlyRes.data);
-
       setClassReports(classRes.data || []);
-
       setLowAttendance(lowRes.data || []);
+
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
 
-      <h1 className="text-3xl font-bold mb-6">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6">
         Attendance Dashboard
       </h1>
 
-      {/* TODAY */}
 
-      <div className="bg-white p-6 rounded-xl shadow mb-6">
-        <h2 className="text-xl font-bold mb-4">
+      <div className="bg-white p-4 sm:p-6 rounded-xl shadow mb-6">
+
+        <h2 className="text-lg sm:text-xl font-bold mb-4">
           Today's Attendance
         </h2>
 
         {today && (
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
 
             <div>
               <p className="text-gray-500">Present</p>
-              <p className="text-2xl font-bold">
+              <p className="text-xl sm:text-2xl font-bold">
                 {today.present}
               </p>
             </div>
 
             <div>
               <p className="text-gray-500">Absent</p>
-              <p className="text-2xl font-bold">
+              <p className="text-xl sm:text-2xl font-bold">
                 {today.absent}
               </p>
             </div>
 
             <div>
               <p className="text-gray-500">Late</p>
-              <p className="text-2xl font-bold">
+              <p className="text-xl sm:text-2xl font-bold">
                 {today.late}
               </p>
             </div>
 
             <div>
               <p className="text-gray-500">Leave</p>
-              <p className="text-2xl font-bold">
+              <p className="text-xl sm:text-2xl font-bold">
                 {today.leave}
               </p>
             </div>
@@ -112,22 +108,24 @@ export default function AttendancePage() {
               <p className="text-gray-500">
                 Attendance %
               </p>
-              <p className="text-2xl font-bold">
+              <p className="text-xl sm:text-2xl font-bold">
                 {today.attendance_percentage}%
               </p>
             </div>
 
           </div>
         )}
+
       </div>
 
-      {/* MONTHLY + YEARLY */}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 
-        <div className="bg-white p-6 rounded-xl shadow">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
 
-          <h2 className="text-xl font-bold mb-4">
+
+        <div className="bg-white p-4 sm:p-6 rounded-xl shadow">
+
+          <h2 className="text-lg sm:text-xl font-bold mb-4">
             Monthly Report
           </h2>
 
@@ -151,9 +149,7 @@ export default function AttendancePage() {
               </p>
 
               <p className="font-bold">
-                Attendance:
-                {" "}
-                {monthly.attendance_percentage}%
+                Attendance: {monthly.attendance_percentage}%
               </p>
 
             </div>
@@ -161,9 +157,11 @@ export default function AttendancePage() {
 
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow">
 
-          <h2 className="text-xl font-bold mb-4">
+
+        <div className="bg-white p-4 sm:p-6 rounded-xl shadow">
+
+          <h2 className="text-lg sm:text-xl font-bold mb-4">
             Yearly Report
           </h2>
 
@@ -187,9 +185,7 @@ export default function AttendancePage() {
               </p>
 
               <p className="font-bold">
-                Attendance:
-                {" "}
-                {yearly.attendance_percentage}%
+                Attendance: {yearly.attendance_percentage}%
               </p>
 
             </div>
@@ -199,11 +195,11 @@ export default function AttendancePage() {
 
       </div>
 
-      {/* CLASS REPORT */}
 
-      <div className="bg-white p-6 rounded-xl shadow mb-6">
 
-        <h2 className="text-xl font-bold mb-4">
+      <div className="bg-white p-4 sm:p-6 rounded-xl shadow mb-6">
+
+        <h2 className="text-lg sm:text-xl font-bold mb-4">
           Class Attendance Performance
         </h2>
 
@@ -215,10 +211,12 @@ export default function AttendancePage() {
           <div className="space-y-3">
 
             {classReports.map((item, index) => (
+
               <div
                 key={index}
-                className="border rounded p-4"
+                className="border rounded p-3 sm:p-4"
               >
+
                 <p className="font-bold">
                   Class {item.class_id}
                   {" - "}
@@ -226,11 +224,11 @@ export default function AttendancePage() {
                 </p>
 
                 <p>
-                  Attendance:
-                  {" "}
-                  {item.attendance_percentage}%
+                  Attendance: {item.attendance_percentage}%
                 </p>
+
               </div>
+
             ))}
 
           </div>
@@ -238,42 +236,51 @@ export default function AttendancePage() {
 
       </div>
 
-      {/* LOW ATTENDANCE */}
 
-      <div className="bg-white p-6 rounded-xl shadow">
 
-        <h2 className="text-xl font-bold mb-4">
+
+      <div className="bg-white p-4 sm:p-6 rounded-xl shadow">
+
+        <h2 className="text-lg sm:text-xl font-bold mb-4">
           Low Attendance Alerts
         </h2>
 
+
         {lowAttendance.length === 0 ? (
+
           <p className="text-gray-500">
             No low attendance students
           </p>
+
         ) : (
+
           <div className="space-y-3">
 
             {lowAttendance.map((student) => (
+
               <div
                 key={student.student_id}
-                className="border rounded p-4"
+                className="border rounded p-3 sm:p-4"
               >
+
                 <p className="font-bold">
                   {student.student_name}
                 </p>
 
                 <p>
-                  Attendance:
-                  {" "}
-                  {student.attendance_percentage}%
+                  Attendance: {student.attendance_percentage}%
                 </p>
+
               </div>
+
             ))}
 
           </div>
+
         )}
 
       </div>
+
 
     </div>
   );

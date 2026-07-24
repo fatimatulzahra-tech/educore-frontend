@@ -1,43 +1,66 @@
-"use client"
+"use client";
 
-import Link from "next/link"
+import Link from "next/link";
 
 export default function ExamPage({
+  params
+}: any) {
 
-params
+  return (
 
-}:any){
+    <div className="
+      p-4
+      md:p-8
+    ">
 
-return(
 
-<div>
+      <h1 className="
+        text-2xl
+        md:text-4xl
+        font-bold
+      ">
+        Exam
+      </h1>
 
-<h1 className="text-4xl font-bold">
 
-Exam
 
-</h1>
+      <div className="
+        grid
+        gap-4
+        mt-6
+        md:mt-8
+      ">
 
-<div className="grid gap-4 mt-8">
 
-<Link
+        <Link
 
-href={`/teacher/exams/${params.examId}/results`}
+          href={`/teacher/exams/${params.examId}/results`}
 
->
+        >
 
-<div className="bg-white p-5 rounded shadow">
+          <div className="
+            bg-white
+            p-5
+            rounded
+            shadow
+            hover:shadow-md
+            transition
+            cursor-pointer
+          ">
 
-Enter Results
+            Enter Results
 
-</div>
+          </div>
 
-</Link>
 
-</div>
+        </Link>
 
-</div>
 
-)
+      </div>
+
+
+    </div>
+
+  );
 
 }
