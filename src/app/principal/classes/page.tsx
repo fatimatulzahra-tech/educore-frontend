@@ -18,7 +18,7 @@ export default function ClassesPage() {
   // FETCH CLASSES
   const fetchClasses = async () => {
     try {
-      const res = await api.get("/classes")
+      const res = await api.get("/classes/")
 
       setClasses(res.data || [])
     } catch (err) {
@@ -29,7 +29,7 @@ export default function ClassesPage() {
   // FETCH SECTIONS
   const fetchSections = async () => {
     try {
-      const res = await api.get("/sections")
+      const res = await api.get("/sections/")
 
       setSections(res.data || [])
     } catch (err) {
