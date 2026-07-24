@@ -19,7 +19,8 @@ export default function ClassesPage() {
   const fetchClasses = async () => {
     try {
       const res = await api.get("/classes/")
-
+       console.log("Request URL:", res.request?.responseURL)
+    console.log("Classes:", res.data)
       setClasses(res.data || [])
     } catch (err) {
       console.log(err)
