@@ -50,7 +50,7 @@ export default function TeacherAssignmentsPage() {
   };
 
   const assignTeacher = async () => {
-    if (!teacherId || !classId || !sectionId || !subject.trim()) {
+    if (!teacherId || !classId  || !subject.trim()) {
       alert("Please fill all fields");
 
       return;
