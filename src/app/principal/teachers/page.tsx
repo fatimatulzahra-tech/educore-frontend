@@ -12,6 +12,15 @@ export default function TeachersPage() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [subject, setSubject] = useState("");
+  const [qualification, setQualification] = useState("");
+
+  const [experience, setExperience] = useState("");
+
+  const [salary, setSalary] = useState("");
+
+  const [joiningDate, setJoiningDate] = useState("");
+
+  const [employmentType, setEmploymentType] = useState("");
 
   useEffect(() => {
     fetchTeachers();
@@ -37,6 +46,11 @@ export default function TeachersPage() {
           email,
           phone,
           subject,
+          qualification,
+          experience,
+          salary,
+          joining_date: joiningDate,
+          employment_type: employmentType,
         });
 
         alert("Teacher updated");
@@ -47,6 +61,11 @@ export default function TeachersPage() {
           email,
           phone,
           subject,
+          qualification,
+          experience,
+          salary,
+          joining_date: joiningDate,
+          employment_type: employmentType,
         });
 
         alert("Teacher created");
@@ -59,6 +78,15 @@ export default function TeachersPage() {
       setEmail("");
       setPhone("");
       setSubject("");
+      setQualification("");
+
+      setExperience("");
+
+      setSalary("");
+
+      setJoiningDate("");
+
+      setEmploymentType("");
 
       fetchTeachers();
     } catch (err) {
@@ -95,23 +123,22 @@ export default function TeachersPage() {
 
   return (
     <div className="p-4 md:p-8">
-
-
-      <h1 className="
+      <h1
+        className="
         text-3xl
         md:text-4xl
         font-bold
         mb-6
         md:mb-8
-      ">
+      "
+      >
         Teachers
       </h1>
 
-
-
       {/* FORM */}
 
-      <div className="
+      <div
+        className="
         bg-white
         rounded-xl
         shadow
@@ -119,9 +146,8 @@ export default function TeachersPage() {
         md:p-6
         mb-8
         space-y-3
-      ">
-
-
+      "
+      >
         <input
           className="
             border
@@ -182,7 +208,72 @@ export default function TeachersPage() {
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
         />
+        <input
+          className="
+    border
+    p-2
+    rounded
+    w-full
+  "
+          placeholder="Qualification"
+          value={qualification}
+          onChange={(e) => setQualification(e.target.value)}
+        />
 
+        <input
+          className="
+    border
+    p-2
+    rounded
+    w-full
+  "
+          placeholder="Experience (Years)"
+          type="number"
+          value={experience}
+          onChange={(e) => setExperience(e.target.value)}
+        />
+
+        <input
+          className="
+    border
+    p-2
+    rounded
+    w-full
+  "
+          placeholder="Salary"
+          type="number"
+          value={salary}
+          onChange={(e) => setSalary(e.target.value)}
+        />
+
+        <input
+          className="
+    border
+    p-2
+    rounded
+    w-full
+  "
+          type="date"
+          value={joiningDate}
+          onChange={(e) => setJoiningDate(e.target.value)}
+        />
+
+        <select
+          className="
+    border
+    p-2
+    rounded
+    w-full
+  "
+          value={employmentType}
+          onChange={(e) => setEmploymentType(e.target.value)}
+        >
+          <option value="">Select Employment Type</option>
+          <option value="Permanent">Permanent</option>
+          <option value="Contract">Contract</option>
+          <option value="Visiting">Visiting</option>
+          <option value="Part Time">Part Time</option>
+        </select>
         <button
           onClick={saveTeacher}
           className="
@@ -197,27 +288,19 @@ export default function TeachersPage() {
         >
           {editingId ? "Update Teacher" : "Create Teacher"}
         </button>
-
-
       </div>
-
-
-
-
 
       {/* TEACHER CARDS */}
 
-      <div className="
+      <div
+        className="
         grid
         grid-cols-1
         md:grid-cols-2
         gap-4
-      ">
-
-
+      "
+      >
         {teachers.map((teacher: any) => (
-
-
           <div
             key={teacher.id}
             className="
@@ -227,41 +310,56 @@ export default function TeachersPage() {
               p-5
             "
           >
-
-
-            <h2 className="
+            <h2
+              className="
               text-lg
               md:text-xl
               font-bold
-            ">
+            "
+            >
               {teacher.first_name} {teacher.last_name}
             </h2>
 
-
             <p className="mt-2">
-              {teacher.subject}
-            </p>
-
-            <p className="break-all">
-              {teacher.email}
+              <strong>Subject:</strong> {teacher.subject}
             </p>
 
             <p>
-              {teacher.phone}
+              <strong>Qualification:</strong> {teacher.qualification}
             </p>
 
+            <p>
+              <strong>Experience:</strong> {teacher.experience} Years
+            </p>
 
+            <p>
+              <strong>Salary:</strong> Rs. {teacher.salary}
+            </p>
 
+            <p>
+              <strong>Joining Date:</strong> {teacher.joining_date}
+            </p>
 
+            <p>
+              <strong>Employment Type:</strong> {teacher.employment_type}
+            </p>
 
-            <div className="
+            <p className="break-all">
+              <strong>Email:</strong> {teacher.email}
+            </p>
+
+            <p>
+              <strong>Phone:</strong> {teacher.phone}
+            </p>
+
+            <div
+              className="
               flex
               gap-3
               mt-4
               flex-wrap
-            ">
-
-
+            "
+            >
               <button
                 onClick={() => {
                   setEditingId(teacher.id);
@@ -271,24 +369,34 @@ export default function TeachersPage() {
                   setEmail(teacher.email);
                   setPhone(teacher.phone);
                   setSubject(teacher.subject);
+
+                  setQualification(teacher.qualification || "");
+
+                  setExperience(
+                    teacher.experience ? String(teacher.experience) : "",
+                  );
+
+                  setSalary(teacher.salary ? String(teacher.salary) : "");
+
+                  setJoiningDate(teacher.joining_date || "");
+
+                  setEmploymentType(teacher.employment_type || "");
                 }}
                 className="
-                  bg-blue-500
+                  bg-yellow-500
                   text-white
                   px-3
                   py-2
                   rounded
                 "
               >
-                Change Teacher
+                Edit Teacher
               </button>
-
-
 
               <button
                 onClick={() => resetPassword(teacher.user_id)}
                 className="
-                  bg-orange-500
+                  bg-green-500
                   text-white
                   px-3
                   py-2
@@ -297,8 +405,6 @@ export default function TeachersPage() {
               >
                 Reset Password
               </button>
-
-
 
               <button
                 onClick={() => deleteTeacher(teacher.id)}
@@ -313,20 +419,10 @@ export default function TeachersPage() {
               >
                 Delete Teacher
               </button>
-
-
             </div>
-
-
           </div>
-
-
         ))}
-
-
       </div>
-
-
     </div>
   );
 }

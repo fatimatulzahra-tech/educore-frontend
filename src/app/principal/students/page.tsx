@@ -15,12 +15,22 @@ export default function StudentsPage() {
   const [form, setForm] = useState({
     class_id: "",
     section_id: "",
+
     first_name: "",
     last_name: "",
+
     admission_number: "",
+    admission_date: "",
+
     gender: "male",
+    date_of_birth: "",
+
+    parent_name: "",
+    parent_phone: "",
+
     email: "",
     phone: "",
+
     address: "",
   });
 
@@ -72,12 +82,22 @@ export default function StudentsPage() {
     setForm({
       class_id: "",
       section_id: "",
+
       first_name: "",
       last_name: "",
+
       admission_number: "",
+      admission_date: "",
+
       gender: "male",
+      date_of_birth: "",
+
+      parent_name: "",
+      parent_phone: "",
+
       email: "",
       phone: "",
+
       address: "",
     });
   };
@@ -88,12 +108,22 @@ export default function StudentsPage() {
     setForm({
       class_id: String(student.class_id),
       section_id: String(student.section_id),
+
       first_name: student.first_name,
       last_name: student.last_name,
+
       admission_number: student.admission_number,
+      admission_date: student.admission_date || "",
+
       gender: student.gender,
+      date_of_birth: student.date_of_birth || "",
+
+      parent_name: student.parent_name || "",
+      parent_phone: student.parent_phone || "",
+
       email: student.email || "",
       phone: student.phone || "",
+
       address: student.address || "",
     });
   };
@@ -105,7 +135,14 @@ export default function StudentsPage() {
       !form.first_name.trim() ||
       !form.last_name.trim() ||
       !form.admission_number.trim() ||
-      !form.email.trim()
+      !form.admission_date ||
+      !form.gender ||
+      !form.date_of_birth ||
+      !form.parent_name.trim() ||
+      !form.parent_phone.trim() ||
+      !form.email.trim() ||
+      !form.phone.trim() ||
+      !form.address.trim()
     ) {
       alert("Please fill all required fields");
       return;
@@ -113,9 +150,25 @@ export default function StudentsPage() {
 
     try {
       const payload = {
-        ...form,
         class_id: Number(form.class_id),
         section_id: Number(form.section_id),
+
+        first_name: form.first_name,
+        last_name: form.last_name,
+
+        admission_number: form.admission_number,
+        admission_date: form.admission_date,
+
+        gender: form.gender,
+        date_of_birth: form.date_of_birth,
+
+        parent_name: form.parent_name,
+        parent_phone: form.parent_phone,
+
+        email: form.email,
+        phone: form.phone,
+
+        address: form.address,
       };
 
       if (editingId) {
@@ -158,6 +211,21 @@ export default function StudentsPage() {
       alert("Password reset failed");
     }
   };
+
+  const deleteStudent = async (id: number) => {
+  if (!confirm("Delete this student?")) return;
+
+  try {
+    await api.delete(`/students/${id}`);
+
+    alert("Student deleted");
+
+    fetchStudents();
+  } catch (err) {
+    console.log(err);
+    alert("Delete failed");
+  }
+};
   return (
     <div className="p-4 sm:p-6">
       <h1 className="text-2xl sm:text-3xl font-bold mb-6">
@@ -165,63 +233,502 @@ export default function StudentsPage() {
       </h1>
 
       <div className="bg-white p-4 sm:p-6 rounded shadow mb-6">
-        <h2 className="font-bold mb-4">
+        <h2 className="font-bold text-lg mb-6">
           {editingId ? "Update Student" : "Add Student"}
         </h2>
 
-        {/* Inputs/selects stay same */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* CLASS */}
 
-        <button
-          onClick={createStudent}
-          className="w-full sm:w-auto bg-black text-white px-4 py-2 rounded"
-        >
-          {editingId ? "Update Student" : "Create Student"}
-        </button>
-      </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Class *</label>
 
-      <div className="bg-white p-4 sm:p-6 rounded shadow">
-        <h2 className="font-bold mb-4">All Students</h2>
+            <select
+              className="border p-2 rounded w-full"
+              value={form.class_id}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  class_id: e.target.value,
+                  section_id: "",
+                })
+              }
+            >
+              <option value="">Select Class</option>
 
-        {students.map((student) => (
-          <div key={student.id} className="border p-4 rounded mb-3">
-            <p className="font-bold break-words">
-              {student.first_name} {student.last_name}
-            </p>
-
-            <p className="text-sm text-gray-500 break-words">
-              Admission: {student.admission_number}
-            </p>
-
-            <p className="text-sm text-gray-500 break-words">
-              Email: {student.email}
-            </p>
-
-            <p className="text-sm text-gray-500">
-              Class: {getClassName(student.class_id)}
-            </p>
-
-            <p className="text-sm text-gray-500">
-              Section: {getSectionName(student.section_id)}
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-2 mt-4">
-              <button
-                onClick={() => editStudent(student)}
-                className="w-full sm:w-auto bg-blue-500 text-white px-3 py-2 rounded"
-              >
-                Change Student
-              </button>
-
-              <button
-                onClick={() => resetPassword(student.user_id)}
-                className="w-full sm:w-auto bg-orange-500 text-white px-3 py-2 rounded"
-              >
-                Reset Password
-              </button>
-            </div>
+              {classes.map((cls) => (
+                <option key={cls.id} value={cls.id}>
+                  {cls.name}
+                </option>
+              ))}
+            </select>
           </div>
-        ))}
+
+          {/* SECTION */}
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Section *</label>
+
+            <select
+              className="border p-2 rounded w-full"
+              value={form.section_id}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  section_id: e.target.value,
+                })
+              }
+            >
+              <option value="">Select Section</option>
+
+              {filteredSections.map((section) => (
+                <option key={section.id} value={section.id}>
+                  {section.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* FIRST NAME */}
+
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              First Name *
+            </label>
+
+            <input
+              className="border p-2 rounded w-full"
+              value={form.first_name}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  first_name: e.target.value,
+                })
+              }
+            />
+          </div>
+
+          {/* LAST NAME */}
+
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Last Name *
+            </label>
+
+            <input
+              className="border p-2 rounded w-full"
+              value={form.last_name}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  last_name: e.target.value,
+                })
+              }
+            />
+          </div>
+
+          {/* ADMISSION NUMBER */}
+
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Admission Number *
+            </label>
+
+            <input
+              className="border p-2 rounded w-full"
+              value={form.admission_number}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  admission_number: e.target.value,
+                })
+              }
+            />
+          </div>
+
+          {/* ADMISSION DATE */}
+
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Admission Date *
+            </label>
+
+            <input
+              type="date"
+              className="border p-2 rounded w-full"
+              value={form.admission_date}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  admission_date: e.target.value,
+                })
+              }
+            />
+          </div>
+
+          {/* GENDER */}
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Gender *</label>
+
+            <select
+              className="border p-2 rounded w-full"
+              value={form.gender}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  gender: e.target.value,
+                })
+              }
+            >
+              <option value="male">Male</option>
+
+              <option value="female">Female</option>
+
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          {/* DOB */}
+
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Date of Birth *
+            </label>
+
+            <input
+              type="date"
+              className="border p-2 rounded w-full"
+              value={form.date_of_birth}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  date_of_birth: e.target.value,
+                })
+              }
+            />
+          </div>
+
+          {/* PARENT NAME */}
+
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Parent / Guardian Name *
+            </label>
+
+            <input
+              className="border p-2 rounded w-full"
+              value={form.parent_name}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  parent_name: e.target.value,
+                })
+              }
+            />
+          </div>
+
+          {/* PARENT PHONE */}
+
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Parent Phone *
+            </label>
+
+            <input
+              className="border p-2 rounded w-full"
+              value={form.parent_phone}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  parent_phone: e.target.value,
+                })
+              }
+            />
+          </div>
+
+          {/* EMAIL */}
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Email *</label>
+
+            <input
+              type="email"
+              className="border p-2 rounded w-full"
+              value={form.email}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  email: e.target.value,
+                })
+              }
+            />
+          </div>
+
+          {/* PHONE */}
+
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Student Phone *
+            </label>
+
+            <input
+              className="border p-2 rounded w-full"
+              value={form.phone}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  phone: e.target.value,
+                })
+              }
+            />
+          </div>
+        </div>
+
+        {/* ADDRESS */}
+
+        <div className="mt-4">
+          <label className="block text-sm font-medium mb-1">Address *</label>
+
+          <textarea
+            rows={3}
+            className="border p-2 rounded w-full"
+            value={form.address}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                address: e.target.value,
+              })
+            }
+          />
+        </div>
+
+        <div className="flex gap-3 mt-6">
+          <button
+            onClick={createStudent}
+            className="bg-black text-white px-5 py-2 rounded"
+          >
+            {editingId ? "Update Student" : "Create Student"}
+          </button>
+
+          {editingId && (
+            <button
+              onClick={resetForm}
+              className="bg-gray-500 text-white px-5 py-2 rounded"
+            >
+              Cancel
+            </button>
+          )}
+        </div>
       </div>
+
+     <div className="bg-white p-4 sm:p-6 rounded shadow">
+
+  <h2 className="font-bold text-lg mb-4">
+    All Students
+  </h2>
+
+
+  {/* Desktop Table */}
+
+  <div className="hidden md:block overflow-x-auto">
+
+    <table className="w-full text-sm">
+
+      <thead className="border-b">
+
+        <tr className="text-left">
+
+          <th className="p-3">
+            Name
+          </th>
+
+          <th className="p-3">
+            Admission No
+          </th>
+
+          <th className="p-3">
+            Class
+          </th>
+
+          <th className="p-3">
+            Section
+          </th>
+
+          <th className="p-3">
+            Email
+          </th>
+
+          <th className="p-3">
+            Actions
+          </th>
+
+        </tr>
+
+      </thead>
+
+
+      <tbody>
+
+
+        {students.map((student)=>(
+
+          <tr 
+            key={student.id}
+            className="border-b"
+          >
+
+            <td className="p-3 font-medium">
+              {student.first_name} {student.last_name}
+            </td>
+
+
+            <td className="p-3">
+              {student.admission_number}
+            </td>
+
+
+            <td className="p-3">
+              {getClassName(student.class_id)}
+            </td>
+
+
+            <td className="p-3">
+              {getSectionName(student.section_id)}
+            </td>
+
+
+            <td className="p-3">
+              {student.email}
+            </td>
+
+
+
+            <td className="p-3">
+
+              <div className="flex gap-2">
+
+
+                <button
+                  onClick={()=>editStudent(student)}
+                  className="bg-blue-500 text-white px-3 py-1 rounded"
+                >
+                  Edit
+                </button>
+
+
+                <button
+                  onClick={()=>resetPassword(student.user_id)}
+                  className="bg-orange-500 text-white px-3 py-1 rounded"
+                >
+                  Reset Password
+                </button>
+
+
+              </div>
+
+
+            </td>
+
+
+          </tr>
+
+
+        ))}
+
+
+      </tbody>
+
+
+    </table>
+
+
+  </div>
+
+
+
+
+
+  {/* Mobile Cards */}
+
+  <div className="md:hidden">
+
+
+    {students.map((student)=>(
+
+      <div
+        key={student.id}
+        className="border rounded p-4 mb-3"
+      >
+
+
+        <h3 className="font-bold text-lg">
+          {student.first_name} {student.last_name}
+        </h3>
+
+
+        <p className="text-sm text-gray-600">
+          Admission:
+          {" "}
+          {student.admission_number}
+        </p>
+
+
+        <p className="text-sm text-gray-600">
+          Class:
+          {" "}
+          {getClassName(student.class_id)}
+        </p>
+
+
+        <p className="text-sm text-gray-600">
+          Section:
+          {" "}
+          {getSectionName(student.section_id)}
+        </p>
+
+
+        <p className="text-sm text-gray-600 break-all">
+          Email:
+          {" "}
+          {student.email}
+        </p>
+
+
+
+        <div className="flex flex-col gap-2 mt-4">
+
+
+          <button
+            onClick={()=>editStudent(student)}
+            className="bg-yellow-500 text-white px-3 py-2 rounded"
+          >
+            Edit Student
+          </button>
+
+
+
+          <button
+            onClick={()=>resetPassword(student.user_id)}
+            className="bg-green-500 text-white px-3 py-2 rounded"
+          >
+            Reset Password
+          </button>
+
+
+        </div>
+
+
+      </div>
+
+
+    ))}
+
+
+  </div>
+
+
+</div>
 
       <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 mt-6">
         <button

@@ -90,6 +90,13 @@ export default function PrincipalLayout({
               </Link>
 
               <Link
+                href="/principal/staff"
+                className="px-4 py-3 rounded-lg hover:bg-gray-800 transition whitespace-nowrap"
+              >
+                Staff 
+              </Link>
+
+              <Link
                 href="/principal/students"
                 className="px-4 py-3 rounded-lg hover:bg-gray-800 transition whitespace-nowrap"
               >
@@ -100,7 +107,14 @@ export default function PrincipalLayout({
                 href="/principal/attendance"
                 className="px-4 py-3 rounded-lg hover:bg-gray-800 transition whitespace-nowrap"
               >
-                Attendance
+                Student Attendance
+              </Link>
+
+              <Link
+                href="/principal/employee_attendance"
+                className="px-4 py-3 rounded-lg hover:bg-gray-800 transition whitespace-nowrap"
+              >
+                Employee Attendance 
               </Link>
 
               <Link

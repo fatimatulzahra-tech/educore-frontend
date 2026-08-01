@@ -11,13 +11,15 @@ export default function TeacherAssignmentsPage() {
   const [editingId, setEditingId] = useState<number | null>(null);
 
   const [teacherId, setTeacherId] = useState("");
-  const [classId, setClassId] = useState("");
-  const [sectionId, setSectionId] = useState("");
-  const [subject, setSubject] = useState("");
+  const [assignmentRows, setAssignmentRows] = useState([
+  {
+    classId: "",
+    sectionId: "",
+    subject: "",
+  },
+]);
 
-  const filteredSections = sections.filter(
-    (section) => section.class_id === Number(classId)
-  );
+ 
 
   useEffect(() => {
     loadData();
@@ -38,20 +40,73 @@ export default function TeacherAssignmentsPage() {
       console.log(err);
     }
   };
+  const addAssignmentRow = () => {
+  setAssignmentRows([
+    ...assignmentRows,
+    {
+      classId: "",
+      sectionId: "",
+      subject: "",
+    },
+  ]);
+};
 
-  const editAssignment = (assignment: any) => {
-    setEditingId(assignment.id);
-    setTeacherId(String(assignment.teacher_id));
-    setClassId(String(assignment.class_id));
-    setSectionId(String(assignment.section_id));
-    setSubject(assignment.subject);
-  };
+const editAssignment = (assignment: any) => {
 
+  setEditingId(assignment.id);
+
+  setTeacherId(String(assignment.teacher_id));
+
+  setAssignmentRows([
+    {
+      classId: String(assignment.class_id),
+      sectionId: String(assignment.section_id),
+      subject: assignment.subject,
+    },
+  ]);
+
+};
+const removeAssignmentRow = (index: number) => {
+  const rows = [...assignmentRows];
+
+  rows.splice(index, 1);
+
+  setAssignmentRows(rows);
+};
+
+  const updateAssignmentRow = (
+  index: number,
+  field: "classId" | "sectionId" | "subject",
+  value: string
+) => {
+  const rows = [...assignmentRows];
+
+  rows[index][field] = value;
+
+  // If class changes, clear section
+  if (field === "classId") {
+    rows[index].sectionId = "";
+  }
+
+  setAssignmentRows(rows);
+};
   const assignTeacher = async () => {
-    if (!teacherId || !classId || !sectionId || !subject.trim()) {
-      alert("Please fill all fields");
-      return;
-    }
+    if (!teacherId) {
+  alert("Please select a teacher");
+  return;
+}
+
+const invalidRow = assignmentRows.find(
+  (row) =>
+    !row.classId ||
+    !row.sectionId ||
+    !row.subject.trim()
+);
+
+    if (invalidRow) {
+          alert("Please complete every assignment.");
+     return;
+    } 
 
     try {
       if (editingId) {
@@ -59,12 +114,15 @@ export default function TeacherAssignmentsPage() {
           `/teacher-assignments/${editingId}`,
           null,
           {
-            params: {
-              teacher_id: teacherId,
-              class_id: classId,
-              section_id: sectionId,
-              subject,
-            },
+            data: {
+  teacher_id: teacherId,
+
+  assignments: assignmentRows.map((row) => ({
+    class_id: row.classId,
+    section_id: row.sectionId,
+    subject: row.subject,
+  })),
+}
           }
         );
 
@@ -74,12 +132,15 @@ export default function TeacherAssignmentsPage() {
           "/teacher-assignments",
           null,
           {
-            params: {
-              teacher_id: teacherId,
-              class_id: classId,
-              section_id: sectionId,
-              subject,
-            },
+            data: {
+  teacher_id: teacherId,
+
+  assignments: assignmentRows.map((row) => ({
+    class_id: row.classId,
+    section_id: row.sectionId,
+    subject: row.subject,
+  })),
+}
           }
         );
 
@@ -88,9 +149,14 @@ export default function TeacherAssignmentsPage() {
 
       setEditingId(null);
       setTeacherId("");
-      setClassId("");
-      setSectionId("");
-      setSubject("");
+
+setAssignmentRows([
+  {
+    classId: "",
+    sectionId: "",
+    subject: "",
+  },
+]);
 
       loadData();
 
@@ -183,98 +249,197 @@ export default function TeacherAssignmentsPage() {
             ))}
 
           </select>
+{assignmentRows.map((row, index) => {
+
+  const filteredSections = sections.filter(
+    (section) =>
+      section.class_id === Number(row.classId)
+  );
+
+  return (
+
+    <div
+      key={index}
+      className="
+        border
+        rounded-lg
+        p-4
+        space-y-3
+      "
+    >
+
+      <h3 className="font-semibold">
+        Assignment {index + 1}
+      </h3>
 
 
+      {/* CLASS */}
 
-          <select
-            className="
-              border 
-              p-3 
-              rounded-lg
-              w-full
-              text-sm
-              sm:text-base
-            "
-            value={classId}
-            onChange={(e)=>setClassId(e.target.value)}
+      <select
+        className="
+          border
+          p-3
+          rounded-lg
+          w-full
+        "
+        value={row.classId}
+        onChange={(e)=>
+          updateAssignmentRow(
+            index,
+            "classId",
+            e.target.value
+          )
+        }
+      >
+
+        <option value="">
+          Select Class
+        </option>
+
+        {classes.map((cls)=>(
+          <option
+            key={cls.id}
+            value={cls.id}
           >
+            {cls.name}
+          </option>
+        ))}
 
-            <option>Select Class</option>
-
-            {classes.map((c)=>(
-              <option
-                key={c.id}
-                value={c.id}
-              >
-                {c.name}
-              </option>
-            ))}
-
-          </select>
+      </select>
 
 
+      {/* SECTION */}
 
+      <select
+        className="
+          border
+          p-3
+          rounded-lg
+          w-full
+        "
+        value={row.sectionId}
+        onChange={(e)=>
+          updateAssignmentRow(
+            index,
+            "sectionId",
+            e.target.value
+          )
+        }
+      >
 
-          <select
-            className="
-              border 
-              p-3 
-              rounded-lg
-              w-full
-              text-sm
-              sm:text-base
-            "
-            value={sectionId}
-            onChange={(e)=>setSectionId(e.target.value)}
+        <option value="">
+          Select Section
+        </option>
+
+        {filteredSections.map((section)=>(
+          <option
+            key={section.id}
+            value={section.id}
           >
+            {section.name}
+          </option>
+        ))}
 
-            <option>Select Section</option>
-
-            {filteredSections.map((s)=>(
-              <option
-                key={s.id}
-                value={s.id}
-              >
-                {s.name}
-              </option>
-            ))}
-
-          </select>
+      </select>
 
 
+      {/* SUBJECT */}
+
+      <input
+        className="
+          border
+          p-3
+          rounded-lg
+          w-full
+        "
+        placeholder="Subject"
+        value={row.subject}
+        onChange={(e)=>
+          updateAssignmentRow(
+            index,
+            "subject",
+            e.target.value
+          )
+        }
+      />
 
 
-          <input
-            className="
-              border 
-              p-3 
-              rounded-lg
-              w-full
-            "
-            value={subject}
-            placeholder="Subject"
-            onChange={(e)=>setSubject(e.target.value)}
-          />
+      {assignmentRows.length > 1 && (
+
+        <button
+          type="button"
+          onClick={()=>
+            removeAssignmentRow(index)
+          }
+          className="
+            bg-red-500
+            text-white
+            px-4
+            py-2
+            rounded
+          "
+        >
+          Remove Assignment
+        </button>
+
+      )}
+
+    </div>
+
+  );
+
+})}
+
+
+         
 
 
 
-          <button
-            className="
-              bg-black
-              text-white
-              px-5
-              py-3
-              rounded-lg
-              w-full
-              sm:w-auto
-            "
-            onClick={assignTeacher}
-          >
-            {editingId
-              ? "Update Assignment"
-              : "Assign Teacher"}
-          </button>
 
+        
+
+
+
+
+         
+
+
+
+        <div className="flex gap-3 flex-wrap">
+
+  <button
+    type="button"
+    onClick={addAssignmentRow}
+    className="
+      bg-green-600
+      text-white
+      px-4
+      py-2
+      rounded
+    "
+  >
+    + Add Assignment
+  </button>
+
+  <button
+    type="button"
+    onClick={assignTeacher}
+    className="
+      bg-black
+      text-white
+      px-5
+      py-2
+      rounded
+    "
+  >
+    {
+      editingId
+        ? "Update Assignments"
+        : "Assign Teacher"
+    }
+  </button>
+
+</div>
 
         </div>
 
@@ -350,17 +515,14 @@ export default function TeacherAssignmentsPage() {
             <button
               onClick={()=>editAssignment(assignment)}
               className="
-                mt-4
-                bg-blue-500
-                text-white
-                px-4
-                py-2
-                rounded-lg
-                w-full
-                sm:w-auto
-              "
+                  bg-yellow-500
+                  text-white
+                  px-3
+                  py-2
+                  rounded
+                "
             >
-              Edit
+              Edit Assignment
             </button>
 
 
