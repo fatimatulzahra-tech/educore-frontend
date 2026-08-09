@@ -114,7 +114,7 @@ export default function PrincipalLayout({
                 href="/principal/employee_attendance"
                 className="px-4 py-3 rounded-lg hover:bg-gray-800 transition whitespace-nowrap"
               >
-                Employee Attendance 
+                Staff Attendance 
               </Link>
 
               <Link
