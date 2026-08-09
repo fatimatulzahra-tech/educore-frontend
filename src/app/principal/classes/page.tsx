@@ -210,48 +210,49 @@ export default function ClassesPage() {
     }
   };
 
-  const createSubjects = async () => {
-    if (!subjectName) {
-      return alert("Subject name required.");
+const createSubjects = async () => {
+  if (!subjectName.trim()) {
+    return alert("Subject name required.");
+  }
+
+  if (selectedSubjectClasses.length === 0) {
+    return alert("Please select at least one class.");
+  }
+
+  try {
+    setLoading(true);
+
+    for (const classId of selectedSubjectClasses) {
+      await api.post("/subjects/", {
+        class_id: classId,
+        name: subjectName.trim(),
+      });
     }
 
-    if (selectedSubjectClasses.length === 0) {
-      return alert("Please select at least one class.");
-    }
+    alert("Subjects created successfully.");
 
-    try {
-      setLoading(true);
+    setSubjectName("");
+    setSelectedSubjectClasses([]);
 
-      for (const classId of selectedSubjectClasses) {
-        try {
-          await api.post("/subjects/", {
-            class_id: classId,
+    await fetchSubjects();
 
-            name: subjectName,
-          });
-        } catch {
-          /*
-          Ignore duplicates.
-        */
-        }
-      }
+  } catch (err: any) {
+    console.error("SUBJECT CREATION ERROR:", err);
 
-      alert("Subjects created successfully.");
+    console.error(
+      "Backend response:",
+      err?.response?.data
+    );
 
-      setSubjectName("");
+    alert(
+      err?.response?.data?.detail ||
+      "Unable to create subjects."
+    );
 
-      setSelectedSubjectClasses([]);
-
-      fetchSubjects();
-    } catch (err) {
-      console.log(err);
-
-      alert("Unable to create subjects.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="p-4 sm:p-6">
       <h1 className="text-2xl sm:text-3xl font-bold mb-6">Class Management</h1>
