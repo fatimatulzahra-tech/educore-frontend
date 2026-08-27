@@ -66,12 +66,9 @@ const saveAttendance = async () => {
     })),
   };
 
-  console.log(payload);
+    await api.post("/employee-attendance", payload);
 
-  // Later
-  // await api.post("/employee-attendance", payload);
-
-  alert("Attendance Ready");
+  alert("Attendance saved successfully");
 };
 
 

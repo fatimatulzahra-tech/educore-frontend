@@ -7,19 +7,18 @@ export default function TeacherAssignmentsPage() {
   const [teachers, setTeachers] = useState<any[]>([]);
   const [classes, setClasses] = useState<any[]>([]);
   const [sections, setSections] = useState<any[]>([]);
+  const [subjects, setSubjects] = useState<any[]>([]);
   const [assignments, setAssignments] = useState<any[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
 
   const [teacherId, setTeacherId] = useState("");
   const [assignmentRows, setAssignmentRows] = useState([
-  {
-    classId: "",
-    sectionId: "",
-    subject: "",
-  },
-]);
-
- 
+    {
+      classId: "",
+      sectionId: "",
+      subjectId: "",
+    },
+  ]);
 
   useEffect(() => {
     loadData();
@@ -30,119 +29,101 @@ export default function TeacherAssignmentsPage() {
       const t = await api.get("/teachers");
       const c = await api.get("/classes");
       const s = await api.get("/sections");
+      const sub = await api.get("/subjects");
       const a = await api.get("/teacher-assignments");
 
       setTeachers(t.data);
       setClasses(c.data);
       setSections(s.data);
+      setSubjects(sub.data);
       setAssignments(a.data);
     } catch (err) {
       console.log(err);
     }
   };
+
   const addAssignmentRow = () => {
-  setAssignmentRows([
-    ...assignmentRows,
-    {
-      classId: "",
-      sectionId: "",
-      subject: "",
-    },
-  ]);
-};
+    setAssignmentRows([
+      ...assignmentRows,
+      {
+        classId: "",
+        sectionId: "",
+        subjectId: "",
+      },
+    ]);
+  };
 
-const editAssignment = (assignment: any) => {
+  const editAssignment = (assignment: any) => {
+    setEditingId(assignment.id);
 
-  setEditingId(assignment.id);
+    setTeacherId(String(assignment.teacher_id));
 
-  setTeacherId(String(assignment.teacher_id));
+    setAssignmentRows([
+      {
+        classId: String(assignment.class_id),
+        sectionId: String(assignment.section_id),
+        subjectId: String(assignment.subject_id),
+      },
+    ]);
+  };
 
-  setAssignmentRows([
-    {
-      classId: String(assignment.class_id),
-      sectionId: String(assignment.section_id),
-      subject: assignment.subject,
-    },
-  ]);
+  const removeAssignmentRow = (index: number) => {
+    const rows = [...assignmentRows];
 
-};
-const removeAssignmentRow = (index: number) => {
-  const rows = [...assignmentRows];
+    rows.splice(index, 1);
 
-  rows.splice(index, 1);
-
-  setAssignmentRows(rows);
-};
+    setAssignmentRows(rows);
+  };
 
   const updateAssignmentRow = (
-  index: number,
-  field: "classId" | "sectionId" | "subject",
-  value: string
-) => {
-  const rows = [...assignmentRows];
+    index: number,
+    field: "classId" | "sectionId" | "subjectId",
+    value: string
+  ) => {
+    const rows = [...assignmentRows];
 
-  rows[index][field] = value;
+    rows[index][field] = value;
 
-  // If class changes, clear section
-  if (field === "classId") {
-    rows[index].sectionId = "";
-  }
+    // If class changes, clear section and subject (both depend on class)
+    if (field === "classId") {
+      rows[index].sectionId = "";
+      rows[index].subjectId = "";
+    }
 
-  setAssignmentRows(rows);
-};
+    setAssignmentRows(rows);
+  };
+
   const assignTeacher = async () => {
     if (!teacherId) {
-  alert("Please select a teacher");
-  return;
-}
+      alert("Please select a teacher");
+      return;
+    }
 
-const invalidRow = assignmentRows.find(
-  (row) =>
-    !row.classId ||
-    !row.sectionId ||
-    !row.subject.trim()
-);
+    const invalidRow = assignmentRows.find(
+      (row) => !row.classId || !row.sectionId || !row.subjectId
+    );
 
     if (invalidRow) {
-          alert("Please complete every assignment.");
-     return;
-    } 
+      alert("Please complete every assignment.");
+      return;
+    }
+
+    const payload = {
+      teacher_id: Number(teacherId),
+      assignments: assignmentRows.map((row) => ({
+        class_id: Number(row.classId),
+        section_id: Number(row.sectionId),
+        subject_id: Number(row.subjectId),
+      })),
+    };
 
     try {
       if (editingId) {
-        await api.put(
-          `/teacher-assignments/${editingId}`,
-          null,
-          {
-            data: {
-  teacher_id: teacherId,
-
-  assignments: assignmentRows.map((row) => ({
-    class_id: row.classId,
-    section_id: row.sectionId,
-    subject: row.subject,
-  })),
-}
-          }
-        );
+        await api.put(`/teacher-assignments/${editingId}`, payload);
 
         alert("Assignment Updated");
       } else {
-        await api.post(
-          "/teacher-assignments",
-          null,
-          {
-            data: {
-  teacher_id: teacherId,
-
-  assignments: assignmentRows.map((row) => ({
-    class_id: row.classId,
-    section_id: row.sectionId,
-    subject: row.subject,
-  })),
-}
-          }
-        );
+        await api.post("/teacher-assignments", payload);
 
         alert("Teacher Assigned");
       }
@@ -150,80 +131,74 @@ const invalidRow = assignmentRows.find(
       setEditingId(null);
       setTeacherId("");
 
-setAssignmentRows([
-  {
-    classId: "",
-    sectionId: "",
-    subject: "",
-  },
-]);
+      setAssignmentRows([
+        {
+          classId: "",
+          sectionId: "",
+          subjectId: "",
+        },
+      ]);
 
       loadData();
-
     } catch {
       alert("Operation failed");
     }
   };
 
-
-  const getTeacherName = (teacherId:number) => {
-    const teacher = teachers.find(
-      (t)=>t.id===teacherId
-    );
+  const getTeacherName = (teacherId: number) => {
+    const teacher = teachers.find((t) => t.id === teacherId);
 
     return teacher
       ? `${teacher.first_name} ${teacher.last_name}`
       : "Unknown Teacher";
   };
 
-
-  const getClassName = (classId:number) => {
-    const cls = classes.find(
-      (c)=>c.id===classId
-    );
+  const getClassName = (classId: number) => {
+    const cls = classes.find((c) => c.id === classId);
 
     return cls ? cls.name : "Unknown Class";
   };
 
-
-  const getSectionName = (sectionId:number) => {
-    const section = sections.find(
-      (s)=>s.id===sectionId
-    );
+  const getSectionName = (sectionId: number) => {
+    const section = sections.find((s) => s.id === sectionId);
 
     return section ? section.name : "Unknown Section";
   };
 
+  const getSubjectName = (subjectId: number) => {
+    const subject = subjects.find((s) => s.id === subjectId);
+
+    return subject ? subject.name : "Unknown Subject";
+  };
 
   return (
     <div className="w-full">
-
-      <h1 className="
+      <h1
+        className="
         text-2xl 
         sm:text-3xl 
         lg:text-4xl 
         font-bold 
         mb-6 
         sm:mb-8
-      ">
+      "
+      >
         Teacher Assignments
       </h1>
 
-
       {/* FORM */}
 
-      <div className="
+      <div
+        className="
         bg-white 
         p-4 
         sm:p-6 
         rounded-xl 
         shadow 
         mb-8
-      ">
-
+      "
+      >
         <div className="space-y-4">
-
-
           <select
             className="
               border 
@@ -234,233 +209,172 @@ setAssignmentRows([
               sm:text-base
             "
             value={teacherId}
-            onChange={(e)=>setTeacherId(e.target.value)}
+            onChange={(e) => setTeacherId(e.target.value)}
           >
+            <option value="">Select Teacher</option>
 
-            <option>Select Teacher</option>
-
-            {teachers.map((teacher)=>(
-              <option
-                key={teacher.id}
-                value={teacher.id}
-              >
+            {teachers.map((teacher) => (
+              <option key={teacher.id} value={teacher.id}>
                 {teacher.first_name} {teacher.last_name}
               </option>
             ))}
-
           </select>
-{assignmentRows.map((row, index) => {
 
-  const filteredSections = sections.filter(
-    (section) =>
-      section.class_id === Number(row.classId)
-  );
+          {assignmentRows.map((row, index) => {
+            const filteredSections = sections.filter(
+              (section) => section.class_id === Number(row.classId)
+            );
 
-  return (
+            const filteredSubjects = subjects.filter(
+              (subject) => subject.class_id === Number(row.classId)
+            );
 
-    <div
-      key={index}
-      className="
+            return (
+              <div
+                key={index}
+                className="
         border
         rounded-lg
         p-4
         space-y-3
       "
-    >
+              >
+                <h3 className="font-semibold">Assignment {index + 1}</h3>
 
-      <h3 className="font-semibold">
-        Assignment {index + 1}
-      </h3>
+                {/* CLASS */}
 
-
-      {/* CLASS */}
-
-      <select
-        className="
+                <select
+                  className="
           border
           p-3
           rounded-lg
           w-full
         "
-        value={row.classId}
-        onChange={(e)=>
-          updateAssignmentRow(
-            index,
-            "classId",
-            e.target.value
-          )
-        }
-      >
+                  value={row.classId}
+                  onChange={(e) =>
+                    updateAssignmentRow(index, "classId", e.target.value)
+                  }
+                >
+                  <option value="">Select Class</option>
 
-        <option value="">
-          Select Class
-        </option>
+                  {classes.map((cls) => (
+                    <option key={cls.id} value={cls.id}>
+                      {cls.name}
+                    </option>
+                  ))}
+                </select>
 
-        {classes.map((cls)=>(
-          <option
-            key={cls.id}
-            value={cls.id}
-          >
-            {cls.name}
-          </option>
-        ))}
+                {/* SECTION */}
 
-      </select>
-
-
-      {/* SECTION */}
-
-      <select
-        className="
+                <select
+                  className="
           border
           p-3
           rounded-lg
           w-full
         "
-        value={row.sectionId}
-        onChange={(e)=>
-          updateAssignmentRow(
-            index,
-            "sectionId",
-            e.target.value
-          )
-        }
-      >
+                  value={row.sectionId}
+                  onChange={(e) =>
+                    updateAssignmentRow(index, "sectionId", e.target.value)
+                  }
+                  disabled={!row.classId}
+                >
+                  <option value="">Select Section</option>
 
-        <option value="">
-          Select Section
-        </option>
+                  {filteredSections.map((section) => (
+                    <option key={section.id} value={section.id}>
+                      {section.name}
+                    </option>
+                  ))}
+                </select>
 
-        {filteredSections.map((section)=>(
-          <option
-            key={section.id}
-            value={section.id}
-          >
-            {section.name}
-          </option>
-        ))}
+                {/* SUBJECT */}
 
-      </select>
-
-
-      {/* SUBJECT */}
-
-      <input
-        className="
+                <select
+                  className="
           border
           p-3
           rounded-lg
           w-full
         "
-        placeholder="Subject"
-        value={row.subject}
-        onChange={(e)=>
-          updateAssignmentRow(
-            index,
-            "subject",
-            e.target.value
-          )
-        }
-      />
+                  value={row.subjectId}
+                  onChange={(e) =>
+                    updateAssignmentRow(index, "subjectId", e.target.value)
+                  }
+                  disabled={!row.classId}
+                >
+                  <option value="">Select Subject</option>
 
+                  {filteredSubjects.map((subject) => (
+                    <option key={subject.id} value={subject.id}>
+                      {subject.name}
+                    </option>
+                  ))}
+                </select>
 
-      {assignmentRows.length > 1 && (
-
-        <button
-          type="button"
-          onClick={()=>
-            removeAssignmentRow(index)
-          }
-          className="
+                {assignmentRows.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeAssignmentRow(index)}
+                    className="
             bg-red-500
             text-white
             px-4
             py-2
             rounded
           "
-        >
-          Remove Assignment
-        </button>
+                  >
+                    Remove Assignment
+                  </button>
+                )}
+              </div>
+            );
+          })}
 
-      )}
-
-    </div>
-
-  );
-
-})}
-
-
-         
-
-
-
-
-        
-
-
-
-
-         
-
-
-
-        <div className="flex gap-3 flex-wrap">
-
-  <button
-    type="button"
-    onClick={addAssignmentRow}
-    className="
+          <div className="flex gap-3 flex-wrap">
+            <button
+              type="button"
+              onClick={addAssignmentRow}
+              className="
       bg-green-600
       text-white
       px-4
       py-2
       rounded
     "
-  >
-    + Add Assignment
-  </button>
+            >
+              + Add Assignment
+            </button>
 
-  <button
-    type="button"
-    onClick={assignTeacher}
-    className="
+            <button
+              type="button"
+              onClick={assignTeacher}
+              className="
       bg-black
       text-white
       px-5
       py-2
       rounded
     "
-  >
-    {
-      editingId
-        ? "Update Assignments"
-        : "Assign Teacher"
-    }
-  </button>
-
-</div>
-
+            >
+              {editingId ? "Update Assignments" : "Assign Teacher"}
+            </button>
+          </div>
         </div>
-
       </div>
-
-
 
       {/* ASSIGNMENT CARDS */}
 
-
-      <div className="
+      <div
+        className="
         grid
         grid-cols-1
         sm:grid-cols-2
         xl:grid-cols-3
         gap-4
-      ">
-
-
-        {assignments.map((assignment)=>(
-
+      "
+      >
+        {assignments.map((assignment) => (
           <div
             key={assignment.id}
             className="
@@ -472,48 +386,41 @@ setAssignmentRows([
               overflow-hidden
             "
           >
-
-            <h2 className="
+            <h2
+              className="
               text-lg
               font-bold
               mb-3
               break-words
-            ">
-              {assignment.subject}
+            "
+            >
+              {getSubjectName(assignment.subject_id)}
             </h2>
 
-
-
-            <div className="
+            <div
+              className="
               space-y-2
               text-sm
               sm:text-base
-            ">
-
+            "
+            >
               <p className="break-words">
                 <strong>Teacher:</strong>{" "}
                 {getTeacherName(assignment.teacher_id)}
               </p>
 
-
               <p>
-                <strong>Class:</strong>{" "}
-                {getClassName(assignment.class_id)}
+                <strong>Class:</strong> {getClassName(assignment.class_id)}
               </p>
-
 
               <p>
                 <strong>Section:</strong>{" "}
                 {getSectionName(assignment.section_id)}
               </p>
-
-
             </div>
 
-
-
             <button
-              onClick={()=>editAssignment(assignment)}
+              onClick={() => editAssignment(assignment)}
               className="
                   bg-yellow-500
                   text-white
@@ -524,16 +431,9 @@ setAssignmentRows([
             >
               Edit Assignment
             </button>
-
-
           </div>
-
         ))}
-
-
       </div>
-
-
     </div>
   );
 }
